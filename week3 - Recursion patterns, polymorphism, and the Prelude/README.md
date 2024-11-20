@@ -209,18 +209,15 @@ mapList _ E        = E
 mapList f (C x xs) = C (f x) (mapList f xs)
 ```
 
-
-===============
-
 One important thing to remember about polymorphic functions is that **the caller gets to pick the types**. When you write a polymorphic function, it must work for every possible input type. This—together with the fact that Haskell has no way to directly make decisions based on what type something is—has some interesting implications which we'll explore later.  
 다형적 함수에 대해 기억해야 할 중요한 점은 **호출자가 타입을 선택할 수 있다는 것**입니다. 다형적 함수를 작성할 때, 그것은 모든 가능한 입력 타입에 대해 작동해야 합니다. 이것은 Haskell이 어떤 타입인지에 따라 직접적으로 결정을 내릴 방법이 없다는 사실과 함께, 나중에 탐구할 몇 가지 흥미로운 함의를 가집니다.
 
 ## The Prelude
 
 The `Prelude` is a module with a bunch of standard definitions that gets implicitly imported into every Haskell program. It's worth spending some time [skimming through its documentation](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html) to familiarize oneself with the tools that are available.  
-`Prelude`는 모든 Haskell 프로그램에 암묵적으로 임포트되는 여러 표준 정의가 포함된 모듈입니다. 사용할 수 있는 도구에 익숙해지기 위해 [그 문서](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html)를 훑어보는 데 시간을 할애할 가치가 있습니다.
+`Prelude`는 모든 Haskell 프로그램에 암묵적으로 임포트되는 여러 표준 정의가 포함된 모듈입니다. 사용할 수 있는 도구에 익숙해지기 위해 [이 문서](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html)를 훑어보는 데 시간을 할애할 가치가 있습니다.
 
-Of course, polymorphic lists are defined in the `Prelude`, along with [many useful polymorphic functions for working with them](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#11). For example, `filter` and `map` are the counterparts to our `filterList` and `mapList`. In fact, the [`Data.List` module contains many more list functions still](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Data-List.html).  
+Of course, polymorphic lists are defined in the `Prelude`, along with [many useful polymorphic functions for working with them](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#11). For example, `filter` and `map` are the counterparts to our `filterList` and `mapList`. In fact, the [`Data.List` module contains many more list functions still](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Data-List.html).   
 물론, 다형적 리스트는 `Prelude`에 정의되어 있으며, [이를 다루기 위한 많은 유용한 다형적 함수들도 함께 제공됩니다](http://haskell.org/ghc/docs/latest/html/libraries/base/Prelude.html#11). 예를 들어, `filter`와 `map`은 우리의 `filterList`와 `mapList`의 대응물입니다. 실제로 [`Data.List` 모듈에는 더 많은 리스트 함수들이 포함되어 있습니다](http://www.haskell.org/ghc/docs/latest/html/libraries/base/Data-List.html).
 
 Another useful polymorphic type to know is `Maybe`, defined as  
@@ -243,7 +240,7 @@ Consider this polymorphic type:
 ```
 
 What functions could have such a type? The type says that given a list of things of type `a`, the function must produce some value of type `a`. For example, the Prelude function `head` has this type.  
-어떤 함수가 이러한 타입을 가질 수 있을까요? 이 타입은 타입 `a`의 리스트가 주어지면, 함수가 타입 `a`의 어떤 값을 생성해야 한다고 말합니다. 예를 들어, `Prelude` 함수인 `head`는 이 타입을 가집니다.
+어떤 함수가 이러한 타입을 가질 수 있을까요? 이 타입은 타입 `a`의 리스트가 주어지면, 함수가 타입 `a`의 어떤 값을 생성해야 한다고 말합니다. 예를 들어, Prelude 함수인 `head`는 이 타입을 가집니다.
 
 But what happens if `head` is given an empty list as input? Let's look at the [source code](http://www.haskell.org/ghc/docs/latest/html/libraries/base/src/GHC-List.html#head) for `head`...  
 그러나 `head`에 빈 리스트가 입력으로 주어지면 어떻게 될까요? `head`의 [소스 코드](http://www.haskell.org/ghc/docs/latest/html/libraries/base/src/GHC-List.html#head)를 살펴봅시다...
@@ -252,10 +249,10 @@ It crashes! There's nothing else it possibly could do, since it must work for *a
 크래시가 발생합니다! 모든 타입에 대해 작동해야 하기 때문에, 다른 방법이 없습니다. 아무데도 없는 상태에서 임의의 타입의 요소를 만들어낼 방법이 없습니다.
 
 `head` is what is known as a *partial function*: there are certain inputs for which `head` will crash. Functions which have certain inputs that will make them recurse infinitely are also called partial. Functions which are well-defined on all possible inputs are known as *total functions*.  
-`head`는 *부분 함수(partial function)*로 알려져 있습니다: `head`가 크래시를 발생시킬 특정 입력이 있습니다. 특정 입력이 함수를 무한히 재귀하게 만드는 함수들도 부분 함수라고 불립니다. 모든 가능한 입력에 대해 잘 정의된 함수는 *총 함수(total functions)*로 알려져 있습니다.
+`head`는 *부분 함수*로 알려져 있습니다: `head`가 크래시를 발생시킬 특정 입력이 있습니다. 특정 입력이 함수를 무한히 재귀하게 만드는 함수들도 부분 함수라고 불립니다. 모든 가능한 입력에 대해 잘 정의된 함수는 *총 함수*로 알려져 있습니다.
 
 It is good Haskell practice to avoid partial functions as much as possible. Actually, avoiding partial functions is good practice in *any* programming language—but in most of them it's ridiculously annoying. Haskell tends to make it quite easy and sensible.  
-Haskell에서는 가능한 한 부분 함수를 피하는 것이 좋은 관행입니다. 실제로, 부분 함수를 피하는 것은 *모든* 프로그래밍 언어에서 좋은 관행이지만, 대부분의 언어에서는 이를 피하는 것이 매우 짜증스럽습니다. Haskell은 이를 상당히 쉽고 합리적으로 만듭니다.
+Haskell에서는 가능한 한 부분 함수를 피하는 것이 좋은 관행입니다. 실제로, 부분 함수를 피하는 것은 *모든* 프로그래밍 언어에서 좋은 관행이지만, 대부분의 언어에서는 이를 피하는 것이 매우 짜증스럽습니다. Haskell은 이를 상당히 쉽고 합리적인 일로 만듭니다.
 
 **`head` is a mistake!** It should not be in the `Prelude`. Other partial `Prelude` functions you should almost never use include `tail`, `init`, `last`, and `(!!)`.  
 **`head`는 실수입니다!** `Prelude`에 있어서는 안 됩니다. 거의 사용해서는 안 되는 다른 부분 `Prelude` 함수로는 `tail`, `init`, `last`, `(!!)` 등이 있습니다.
@@ -322,7 +319,7 @@ In some sense, `safeHead` is still "partial"; but we have reflected the partiali
 어떤 면에서, `safeHead`는 여전히 "부분적"입니다; 하지만 우리는 타입 시스템에 부분성을 반영했기 때문에 이제 안전합니다. 목표는 타입이 함수의 동작에 대해 가능한 한 많이 알려주도록 하는 것입니다.
 
 OK, but what if we know that we will only use `head` in situations where we are *guaranteed* to have a non-empty list? In such a situation, it is really annoying to get back a `Maybe a`, since we have to expend effort dealing with a case which we "know" cannot actually happen.  
-알겠습니다, 하지만 만약 우리가 리스트가 *비어 있지 않다는 것이 보장된* 상황에서만 `head`를 사용할 것이라는 것을 안다면 어떨까요? 그런 상황에서는 실제로 발생하지 않을 것이라고 "알고 있는" 경우를 처리해야 하기 때문에 `Maybe a`를 반환받는 것이 정말 짜증납니다.
+알겠습니다, 하지만 만약 우리가 리스트가 비어 있지 않다는 것이 *보장된* 상황에서만 `head`를 사용할 것이라는 것을 안다면 어떨까요? 그런 상황에서는 실제로 발생하지 않을 것이라고 "알고 있는" 경우를 처리해야 하기 때문에 `Maybe a`를 반환받는 것이 정말 짜증나는 일이 됩니다.
 
 The answer is that if some condition is really *guaranteed*, then the types ought to reflect the guarantee! Then the compiler can enforce your guarantees for you. For example:  
 답은 어떤 조건이 정말로 *보장된다면*, 타입이 그 보장을 반영해야 한다는 것입니다! 그러면 컴파일러가 당신의 보장을 강제할 수 있습니다. 예를 들어:
